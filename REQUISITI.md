@@ -120,11 +120,26 @@ Perché è meglio? Perché ora sappiamo **quanto spesso**, **dove finisce il dat
 ## Gruppo A — Database su restdb.io (modello dati + API)
 > Obiettivo: strutturare i dati in modo che siano consultabili, confrontabili e “puliti”.
 
-### Requisiti funzionali (esempi)
-- **RF-DB-01 — Anagrafiche**: Il database deve gestire le entità: `Apiario`, `Arnia`, `Sensore`, `Misura`, `Allarme`, `Utente`.  
+### Requisiti funzionali
+- **RF-DB-01 — Anagrafiche**: Il database deve gestire le entità: `Apiario`, `Arnia`, `Sensore`, `Notifica`, `Rilevazione`, `Utente`.  
+- **RF-DB-02 — Tipo utente**: Devono esistere diversi tipi di utente: `Admin`, `Apicoltore`.
+- **RF-DB-03 — Dati del database**: Il database deve ricevere i dati:
+-- Rumore (dB)
+-- Peso (kg)
+-- Temperatura (°C)
+-- Umidità (%)
+-- Entrata (bmp)
+-- Livello acqua (%)
+- **RF-DB-04 — Filtri e Statistiche**: Aggiungere filtri e statistiche varie.
+- **RF-DB-05 — Apiari**: Gestire più apiari.
+- **RF-DB-06 — Arnie**:  Collegare più arnie ad un apiario.
 
-### Requisiti non funzionali (esempi)
-- **RNF-DB-01 — Retention**: Lo storico misure deve essere conservato per almeno 12 mesi.  
+### Requisiti non funzionali
+- **RNF-DB-01 — Retention**: Lo storico misure deve essere conservato per almeno 2 mesi.  
+- **RNF-DB-02 — Misurazione**: Avere misurazioni su richiesta.
+- **RNF-DB-03 — Notifica**: Identificare e segnalare problemi o misurazioni con una notifica.
+- **RNF-DB-04 — Backup**: Backup automatici ogni settimana e successivamente fare pulizia.(evoluzione futura)
+- **RNF-DB-05 — Salvataggio**: Salvare nel log gli accessi.(evoluzione futura)
 
 📎 Media consigliati (da inserire nel vostro documento):
 - Logo/icone Markdown (se fate una copertina): vedi risorsa “Markdown SVG”.
