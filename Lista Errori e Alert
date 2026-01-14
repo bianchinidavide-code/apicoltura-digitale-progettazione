@@ -16,3 +16,14 @@
 - **1.12 Intervallo di Campionamento: Attesa controllata di 6 minuti (RF-SW-07).**
 - **1.13 Tentativo di Ripristino Dati: Se la connessione torna disponibile, tentativo di upload dei dati locali accumulati (RNF-SW-01).**
 - **1.14 Chiusura Loop: Rinvio dell'esecuzione all'inizio del ciclo di misurazione.**
+
+
+### **3.0 Ciclo di Misurazione e Acquisizione Umidità**
+ - **3.1 impossibile rilevare il sensore dell'umidità**
+ - **3.2 impossibile ottenere informazioni sull'umidità**
+ - **3.3 Il dato non può essere null**
+ - **3.4 Il dato non può essere negativo**
+ - **3.5 Il dato deve essere gestito con una variabile float**
+ - **3.6 Esp32 offline**
+ - **3.7 Umidità troppo alta**
+ - **3.8 Umidità troppo bassa**
