@@ -241,7 +241,7 @@ Prima di selezionare l’offerta del gestore di rete, deve essere effettuato un 
 
 # 8) Mini nota: cos’è un file Markdown (.md) e perché lo usiamo
 **Markdown** è un modo semplice per scrivere documenti usando solo testo, ma con una sintassi leggera per titoli, elenchi, grassetti e blocchi di codice.  
-È perfetto per GitHub e per consegne “pulite” in cui versionare modifiche e lavorare in gruppo.
+È perfetto per GitHub e per consegne “pulite” in cui versionare modifiche e lavorare in gruppo
 
 ### Mini cheat sheet Markdown
 ```md
