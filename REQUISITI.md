@@ -1,6 +1,6 @@
 
 
-# 🧭 Guida rapida: come si scrivono i requisiti (progetto “Apicoltura Digitale”)
+# 🧭 [LISTA DEI REQUISITI](https://github.com/IIS-Franchetti-Salviani/apicoltura-digitale-progettazione/blob/main/REQUISITI.md#7-requisiti-per-i-4-gruppi-di-lavoro) E guida rapida: come si scrivono i requisiti (progetto “Apicoltura Digitale”)
 
 > **Obiettivo:** trasformare idee, appunti e desideri del cliente in frasi **chiare, verificabili e tracciabili** (cioè: controllabili con un test e collegabili alla loro “fonte”).
 > Nel nostro progetto, l’obiettivo generale è realizzare un sistema IoT per supportare l’apicoltore con dati remoti su produzione e stato dell’arnia, includendo device IoT, API/REST, base dati e infrastruttura di rete.
@@ -13,12 +13,13 @@
 3. Requisiti **utente** vs requisiti **di sistema**
 4. Requisiti **funzionali** vs **non funzionali**
 5. Un *template* semplice (da copiare/incollare) per ogni requisito
-6. TUTTI I REQUISITI dei 4 gruppi di lavoro:
+6. Da appunto “buttato giù” a requisito decente (mini esempio)
+7. TUTTI I REQUISITI dei 4 gruppi di lavoro:
  - Database su **restdb.io**
  - Device **ESP32-CAM**: sensori e hardware
  - Software su ESP32-CAM + comunicazione **REST**
  - Architettura di rete e infrastruttura
-7. Mini nota: cos’è un file **Markdown (.md)** e come si scrive
+8. Mini nota: cos’è un file **Markdown (.md)** e come si scrive
 
 ---
 
