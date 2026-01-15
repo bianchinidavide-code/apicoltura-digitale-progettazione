@@ -13,11 +13,11 @@
 3. Requisiti **utente** vs requisiti **di sistema**
 4. Requisiti **funzionali** vs **non funzionali**
 5. Un *template* semplice (da copiare/incollare) per ogni requisito
-6. Esempi pronti per i 4 gruppi di lavoro:
-- Database su **restdb.io**
-- Device **ESP32-CAM**: sensori e hardware
-- Software su ESP32-CAM + comunicazione **REST**
-- Architettura di rete e infrastruttura
+6. TUTTI I REQUISITI dei 4 gruppi di lavoro:
+ - Database su **restdb.io**
+ - Device **ESP32-CAM**: sensori e hardware
+ - Software su ESP32-CAM + comunicazione **REST**
+ - Architettura di rete e infrastruttura
 7. Mini nota: cos’è un file **Markdown (.md)** e come si scrive
 
 ---
