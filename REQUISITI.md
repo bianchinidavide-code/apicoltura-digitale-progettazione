@@ -216,10 +216,6 @@ Indica la quantità d’acqua presente nel serbatoio utilizzato per il raffredda
     
 3.  Predatori: Si possono notare calabroni o vespe che attaccano la colonia.
     
-
-
-**[RF-HW-05 — Livello Risorse Idriche](DOCUMENTAZIONE%20HARDWARE.md#hw-038-rf-hw-05)** Il device deve misurare la distanza del pelo libero dell'acqua in un serbatoio esterno (secchio) e convertire il dato in percentuale residua.
-
   
 
 ----------
@@ -327,7 +323,6 @@ Indica la quantità d’acqua presente nel serbatoio utilizzato per il raffredda
 ## Gruppo D — Architettura di rete e infrastruttura (server, sicurezza, connettività)
 > Obiettivo: definire come “parlano” tra loro device, server e interfaccia web (e con quali garanzie).
 
-
 ### Requisiti funzionali
 
 **RF-NET-01 — Router dedicato all’apiario:**  
@@ -420,4 +415,3 @@ Prima di selezionare l’offerta del gestore di rete, deve essere effettuato un 
 8. **Tracciabilità** (tabellina requisito → fonte → test → componente)
 
 Buon lavoro: i requisiti non sono “burocrazia”, sono l’unico modo per non litigare con il futuro voi stessi. 😄
-
