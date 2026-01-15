@@ -48,5 +48,6 @@
 
 ## Setup wifi
 -Gestione in modalità Acces Point
+-Gestione in modalità Client
 
 ![Alt Text](https://ae01.alicdn.com/kf/H6ae6caf067f64ea4915338c69baa4defr/ESP32-CAM-WiFi-Bluetooth-Module-Camera-Module-Development-Board-ESP32-with-Camera-Module-OV2640-2MP-For.jpg_640x640.jpg)
