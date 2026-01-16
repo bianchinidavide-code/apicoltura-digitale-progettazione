@@ -44,12 +44,19 @@ struct RisultatoPeso {
 };
 
 // ============================================================================
+// DB WRITE (STUB) - RISERVATO AL GRUPPO DATABASE
+// ============================================================================
+static void scritturaDatoNelDB_hx711(const RisultatoValidazione* risultato) {
+  // STUB: implementazione riservata al gruppo Database
+  (void)risultato; // evita warning
+}
+
+// ============================================================================
 // SETUP - Inizializzazione hardware
 // ============================================================================
 void setup_hx711() {
   Serial.println("-> Inizializzazione sensore HX711...");
 
-  // Configurazione pin
   pinMode(HX711_DOUT_PIN, INPUT);
   pinMode(HX711_SCK_PIN, OUTPUT);
   digitalWrite(HX711_SCK_PIN, LOW);
@@ -137,7 +144,6 @@ static bool verificaTaratura(int* erroreSpecifico) {
 RisultatoValidazione read_weight_hx711() {
   RisultatoValidazione risultato;
 
-  // Verifica se sensore abilitato
   if (!_hx711_abilitato) {
     risultato.valido = false;
     risultato.codiceErrore = ERR_SENSOR_OFFLINE;
@@ -146,7 +152,6 @@ RisultatoValidazione read_weight_hx711() {
     return risultato;
   }
 
-  // Verifica se sensore inizializzato
   if (!_hx711_inizializzato) {
     risultato.valido = false;
     risultato.codiceErrore = ERR_SENSOR_NOT_READY;
@@ -155,7 +160,6 @@ RisultatoValidazione read_weight_hx711() {
     return risultato;
   }
 
-  // Verifica taratura
   int erroreSpecifico = 0;
   if (!verificaTaratura(&erroreSpecifico)) {
     risultato.valido = false;
@@ -169,13 +173,8 @@ RisultatoValidazione read_weight_hx711() {
   // long raw = scale.read_average(5);
   // float peso_kg = (raw - _hx711_offset) / _hx711_calibration_factor;
 
-  // Valore simulato per test
-  float peso_kg = 25.5f;
+  float peso_kg = 25.5f; // valore simulato
 
-  // Verifica saturazione ADC
-  // TODO: Implementare verifica saturazione reale
-
-  // Verifica conversione valida
   if (isnan(peso_kg) || isinf(peso_kg)) {
     risultato.valido = false;
     risultato.codiceErrore = ERR_PS_CONVERSION_FAILED;
@@ -184,7 +183,6 @@ RisultatoValidazione read_weight_hx711() {
     return risultato;
   }
 
-  // Validazione dato
   bool sensoreReady = true;
   unsigned long timestamp = millis();
 
@@ -195,16 +193,18 @@ RisultatoValidazione read_weight_hx711() {
     _configValidazionePeso
   );
 
-  // Se valido, verifica soglie
   if (risultato.valido) {
     verificaSoglie(risultato.valorePulito, _hx711_sogliaMin, _hx711_sogliaMax, "HX711");
+
+    // >>> CHIAMATA AL METODO DB (STUB)
+    scritturaDatoNelDB_hx711(&risultato);
   }
 
   return risultato;
 }
 
 // ============================================================================
-// GETTERS - Accesso ai parametri di configurazione
+// GETTERS
 // ============================================================================
 unsigned long get_intervallo_hx711() {
   return _hx711_intervallo;
