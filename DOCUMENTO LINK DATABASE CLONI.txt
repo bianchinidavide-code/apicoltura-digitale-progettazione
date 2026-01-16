@@ -44,7 +44,7 @@ Clone 4 (DATABASE):
 
 CLONE 5 (SCORTA):
 	API: 28ade382b313db86d3cab6da35d50b0666f2f
-	URL DATABASE: 
+	URL DATABASE: clonedb5dhsjjhhfudii-66f3.restdb.io
 	URL apiari: https://clonedb5dhsjjhhfudii-66f3.restdb.io/rest/apiari
 	URL arnie: https://clonedb5dhsjjhhfudii-66f3.restdb.io/rest/arnie
 	URL sensori: https://clonedb5dhsjjhhfudii-66f3.restdb.io/rest/sensori
