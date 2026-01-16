@@ -25,94 +25,121 @@ N/A
 ```
 #include <WiFi.h>
 
-// CONFIGURAZIONE PIN (ESP32-CAM)
-const int PIN_ALIMENTAZIONE = 12; // GPIO 12: Dà corrente al sensore
-const int PIN_SEGNALE = 13;       // GPIO 13: Legge il valore (ADC2)
+// ============================================================
+// CONFIGURAZIONE UTENTE (DA MODIFICARE)
+// ============================================================
+const char* ssid     = "IL_TUO_NOME_WIFI";   // <--- Scrivi qui il nome del WiFi
+const char* password = "LA_TUA_PASSWORD";    // <--- Scrivi qui la password
 
-// CONFIGURAZIONE WIFI
-const char* ssid = "IL_TUO_WIFI";
-const char* password = "LA_TUA_PASSWORD";
+// ============================================================
+// CONFIGURAZIONE HARDWARE
+// ============================================================
+// Pin Segnale: GPIO 14 (Condiviso con MicroSD - Rimuovere la SD!)
+// VCC Sensore: Collegato a 3.3V o 5V (Sempre acceso)
+// GND Sensore: Collegato a GND
+const int PIN_SEGNALE = 14; 
 
-// SOGLIE DI CALIBRAZIONE (0 - 4095)
-// Nota: ESP32 è a 12-bit. 0 = Bagnatissimo, 4095 = Asciuttissimo
-const int SOGLIA_SECCO = 3800;    // Sopra questo valore, il secchio è vuoto (Resistenza alta)
-const int SOGLIA_PIENO = 2500;    // Sotto questo valore, c'è molta acqua
+// ============================================================
+// CONFIGURAZIONE SOGLIE (LOGICA: 0 = ARIA, ALTO = ACQUA)
+// ============================================================
+// Se il valore è SOTTO questa soglia (es. 0-400), il secchio è VUOTO/SECCO.
+const int SOGLIA_MINIMA_ACQUA = 400; 
 
+// Se il valore è SOPRA questa soglia (es. > 1500), il secchio è PIENO BENISSIMO.
+const int SOGLIA_OTTIMALE = 1500;
+
+// ============================================================
+// SETUP
+// ============================================================
 void setup() {
   Serial.begin(115200);
-  
-  // Configura i pin
-  pinMode(PIN_ALIMENTAZIONE, OUTPUT);
-  digitalWrite(PIN_ALIMENTAZIONE, LOW); // Assicuriamoci che sia SPENTO all'avvio
-  
-  // Per l'ESP32-CAM, il pin 13 è flottante se non usato, meglio definirlo input
+  delay(1000); // Piccolo ritardo per avviare la seriale
+
+  // Impostiamo il pin in lettura
   pinMode(PIN_SEGNALE, INPUT);
 
-  Serial.println("Sistema Avviato - Monitoraggio Api");
+  Serial.println("\n----------------------------------------");
+  Serial.println(" SISTEMA MONITORAGGIO ACQUA (ESP32-CAM)");
+  Serial.println(" Sensore su GPIO 14 - Logica: 0=Secco");
+  Serial.println("----------------------------------------");
 }
 
+// ============================================================
+// LOOP PRINCIPALE
+// ============================================================
 void loop() {
-  // LETTURA SENSORE (A WiFi SPENTO)
   
-  // Importante: Disconnettere il WiFi per liberare l'ADC2
+  // ----------------------------------------------------------
+  // FASE 1: LETTURA SENSORE (WiFi SPENTO)
+  // ----------------------------------------------------------
+  // Il GPIO 14 usa l'ADC2, che non funziona se il WiFi è attivo.
+  // Dobbiamo spegnerlo brutalmente per leggere pulito.
+  
   WiFi.disconnect(true);
   WiFi.mode(WIFI_OFF);
   delay(100); 
 
-  // Accendiamo il sensore
-  digitalWrite(PIN_ALIMENTAZIONE, HIGH); 
-  delay(50); // Attendiamo che il segnale si stabilizzi
-  
-  // Leggiamo il valore
-  // Facciamo 3 letture e prendiamo la media per stabilità
-  int somma = 0;
-  for(int i=0; i<3; i++){
+  // Facciamo 5 letture e prendiamo la media per essere precisi
+  long somma = 0;
+  for(int i=0; i<5; i++){
     somma += analogRead(PIN_SEGNALE);
-    delay(10);
+    delay(20);
   }
-  int valoreLetto = somma / 3;
+  int valoreLetto = somma / 5;
 
-  // Spegniamo subito il sensore (Anti-Corrosione)
-  digitalWrite(PIN_ALIMENTAZIONE, LOW);
+  // ----------------------------------------------------------
+  // FASE 2: ANALISI LOGICA
+  // ----------------------------------------------------------
   
-  Serial.print("Valore Sensore: ");
-  Serial.println(valoreLetto);
-
+  Serial.print("Lettura Sensore: ");
+  Serial.print(valoreLetto);
+  
   String statoMessaggio = "";
   
-  if (valoreLetto >= SOGLIA_SECCO) {
-    // STATO: Sotto la soglia / Asciutto
-    statoMessaggio = "ALLARME: Secchio vuoto! Acqua finita.";
+  // LOGICA: Più il numero è basso, meno acqua c'è.
+  
+  if (valoreLetto < SOGLIA_MINIMA_ACQUA) {
+    // Valore vicino a 0 -> Sensore in aria
+    statoMessaggio = " -> ALLARME: Secchio VUOTO (o sensore staccato)!";
   } 
-  else if (valoreLetto > SOGLIA_PIENO && valoreLetto < SOGLIA_SECCO) {
-    // STATO: Inizio Evaporazione / Intermedio
-    statoMessaggio = "INFO: Livello in calo (Evaporazione).";
+  else if (valoreLetto >= SOGLIA_MINIMA_ACQUA && valoreLetto < SOGLIA_OTTIMALE) {
+    // Valore intermedio -> C'è acqua ma non è pieno
+    statoMessaggio = " -> INFO: Livello medio/basso.";
   } 
   else {
-    // STATO: Pieno / OK
-    statoMessaggio = "OK: Acqua presente.";
+    // Valore alto -> C'è molta conducibilità
+    statoMessaggio = " -> OK: Livello OTTIMALE (Pieno).";
   }
 
   Serial.println(statoMessaggio);
 
-  // INVIO DATI (A WiFi ACCESO)
+  // ----------------------------------------------------------
+  // FASE 3: CONNESSIONE E INVIO (WiFi ACCESO)
+  // ----------------------------------------------------------
   
+  // Riaccendiamo il WiFi solo ora
   connettiEInvia(valoreLetto, statoMessaggio);
 
-  // FASE 4: PAUSA (Risparmio Energetico)
+  // ----------------------------------------------------------
+  // FASE 4: PAUSA
+  // ----------------------------------------------------------
   
-  Serial.println("Entro in pausa per 10 minuti...");
-  // Nota: Per un vero risparmio batteria, qui si userebbe il Deep Sleep
-  // Per ora usiamo un delay lungo per testare facilmente
-  delay(600000); // 600.000 ms = 10 minuti
+  Serial.println("Attesa 5 secondi per il prossimo test...");
+  Serial.println("----------------------------------------");
+  
+  // NOTA: Cambia questo valore a 600000 (10 minuti) quando lo metti nell'arnia
+  delay(5000); 
 }
 
-// Funzione ausiliaria per connettersi e inviare
+// ============================================================
+// FUNZIONE AUSILIARIA PER IL WIFI
+// ============================================================
 void connettiEInvia(int valore, String messaggio) {
-  Serial.println("Connessione WiFi in corso...");
+  Serial.println("..Attivazione WiFi..");
   WiFi.begin(ssid, password);
   
   int tentativi = 0;
+  // Aspettiamo massimo 10 secondi (20 tentativi da 500ms)
   while (WiFi.status() != WL_CONNECTED && tentativi < 20) {
     delay(500);
     Serial.print(".");
@@ -120,20 +147,22 @@ void connettiEInvia(int valore, String messaggio) {
   }
 
   if(WiFi.status() == WL_CONNECTED) {
-    Serial.println("\nWiFi Connesso!");
+    Serial.println("\nWiFi CONNESSO!");
+    Serial.print("IP Assegnato: ");
+    Serial.println(WiFi.localIP());
     
-    // QUI ANDRA' IL CODICE PER INVIARE AL SERVER
-    // Esempio simulato:
-    Serial.print("Invio al server -> Valore: ");
+    // --- QUI SIMULIAMO L'INVIO AL SERVER ---
+    // (In futuro qui metterai il codice Telegram o MQTT)
+    Serial.print(">> DATI INVIATI: Valore=");
     Serial.print(valore);
-    Serial.print(" | Msg: ");
+    Serial.print(" Msg=");
     Serial.println(messaggio);
     
   } else {
-    Serial.println("\nErrore: Impossibile connettersi al WiFi.");
+    Serial.println("\nERRORE: Impossibile connettersi al WiFi.");
   }
   
-  // Disconnetti per sicurezza
+  // Disconnettiamo subito per liberare le risorse per la prossima lettura
   WiFi.disconnect(true);
 }
 ```
